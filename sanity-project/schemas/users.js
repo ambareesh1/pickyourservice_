@@ -48,7 +48,23 @@ export default {
             name: 'isSupplier',
             type: 'boolean',
             title: 'is Supplier'
+        },
+        {
+            name: 'otp',
+            type: 'string',
+            title: 'otp'
+        },
+        {
+            name: 'pickCreditPoints',
+            type: 'string',
+            title: 'pickCreditPoints'
+        },
+        {
+            name: 'isActive',
+            type: 'boolean',
+            title: 'isActive'
         }
+
     ]
 }
 

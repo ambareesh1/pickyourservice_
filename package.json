@@ -38,6 +38,7 @@
     "react-native-numeric-input": "^1.9.1",
     "react-native-otp-verify": "^1.1.4",
     "react-native-paper": "^5.2.0",
+    "react-native-progress": "^5.0.0",
     "react-native-reanimated": "~2.12.0",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "~3.18.0",

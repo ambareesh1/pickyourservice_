@@ -10,7 +10,7 @@ import {getUserDetails} from '../services/dataservice';
 import axios from 'axios';
 import  {UserContext}  from "../services/UserContext";
 import * as MailComposer from 'expo-mail-composer';
-import axios from 'axios';
+
 
 const LoginScreen = ({ navigation }) => {
     const [mobilenumber, setMobileNumber] = useState('');
@@ -54,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
          const userdata =  await getUserDetails(mobilenumber);
          if(userdata){
             setUser({ name: userdata.name, email: userdata.email, phoneNo : userdata.phoneNo, image : getImageUrl(userdata.profileimage.asset._ref) });
-            sendEmail(userdata);
+            //sendEmailBlue(userdata);
               return true;
          }
        return false;
@@ -127,12 +127,21 @@ const LoginScreen = ({ navigation }) => {
           console.log('Email sent successfully!');
         }
       };
-      const sendEmailBlue = async () => {
+      const sendEmailBlue = async (userdata) => {
         const data = {
-          sender: { name: 'John Doe', email: 'ambru333@gmail.com' },
-          to: [{ email: 'ambru333@gmail.com' }],
-          subject: 'Test email',
-          htmlContent: '<p>This is a test email from Sendinblue!</p>'
+          sender: { name: 'Pick Your Service', email: 'ambru333@gmail.com' },
+          to: [{ email: 'mokashakvk@gmail.com' }],
+          subject: 'Welcome to Pick your service - Get started',
+          htmlContent: `<div style="display:table;margin:10px;padding:10px;background-color:'#0097A7';border:10px solid #f0f0f0;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-weight:bold;color:#777;margin:0 auto;font-size:16px">   <img src="https://live.staticflickr.com/65535/52696212128_5df7741e0f.jpg" alt="Pick My Service Logo" style="height:120px;width:120px"> 
+          <div style="text-align:center;padding:0px"> <h2> Welcome to Pick your Service </h2>
+          <p style="text-align: left;padding-left: 20px;"> Dear <span><b>Mounika sai,</b> </span> </p>
+          </div> <div style="margin-top:10px;font-size:14px!important;line-height:24px;color:#46535e;padding:0 20px 30px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;background-color:#fff;font-weight:normal;padding-top:2px;border-radius:2px"> <p>We are thrilled to have you here and are excited to offer you a wide range of home services to meet all of your needs. From plumbing to painting and everything in between, we've got you covered.</p>
+          
+          <p>Our team of skilled professionals is dedicated to providing you with the highest quality service, and we are committed to making your experience with us as seamless and enjoyable as possible.</p>
+          <p>Whether you need a simple repair, a complete renovation, or just some routine maintenance, we have the expertise and resources to get the job done right. And with our competitive pricing and flexible scheduling, you can trust that you are getting the best value for your money.</p>
+          <p>Thank you for choosing Pick My Service, and we look forward to serving you soon!</p>
+          <p>Sincerely,<br>Pick My Service Team</p></div></div><div style="background-color: #FEBD59;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;padding:10px;font-weight:normal;font-size:12px;color: #555;"><p> If you are facing any problem while rising a request, please find the below contact details </p> <p> Email : <a href="mailto:contact@pickyourservice.com" target="_blank">contact@pickyourservice.com</a> </p><p> </p><p> mobile :9535770068</p><div class="yj6qo"></div><div class="adL"> <p> </p> <p></p><p></p></div></div><div class="adL"> </div>
+`
         };
       
         try {
@@ -176,7 +185,7 @@ const LoginScreen = ({ navigation }) => {
 
                     </View>
 
-                    <Card style={{ marginTop: 5 }}>
+                    <Card style={{ marginTop: 6 }}>
                         <Card.Content >
                             <Paragraph style={{ marginTop: 1, color: 'grey', textAlign: 'left', padding: 10 }}>If you not yet registered</Paragraph>
                             <View style={styles.indicatorContainer}>

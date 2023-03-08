@@ -12,6 +12,7 @@ import { mystore } from './Components/MyStore';
 import ProgressScreen from './screens/ProgressScreen';
 import otpScreen from './screens/OtpScreen';
 import  { UserProvider }  from "./services/UserContext";
+import RegistrationConformScreen from './screens/RegistrationConformScreen';
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Stack.Screen name="Search" component={SubCategory} options={{ headerShown: false }} />
           <Stack.Screen name="ProgressScreen" component={ProgressScreen} options={{ headerShown: true }} />
           <Stack.Screen name="Otp Screen" component={otpScreen} options={{ headerShown: true }}></Stack.Screen>
+          <Stack.Screen name="Verify User" component={RegistrationConformScreen} options={{ headerShown: true }}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -44,15 +44,20 @@ export const fetchCategories = async () => {
 }
 
 export const createUser = (bodyObj) => {
-    client.create(
-        {
-            _type: 'users',
-          ...bodyObj
-        }
-    )
-        .then(res => console.log('Data inserted successfully', res))
-        .catch(err => console.error('Error inserting data', err.message));
-}
+  return client.create({
+    _type: 'users',
+    ...bodyObj
+  })
+    .then(res => {
+      console.log('Data inserted successfully', res);
+      return res;
+    })
+    .catch(err => {
+      console.error('Error inserting data', err.message);
+      throw err;
+    });
+};
+
 export const insertData = () => {
     client.create(
         {
@@ -130,7 +135,30 @@ export const uploadImage = async (imagePath) => {
     return userDetails;
   }
 
+export const updateUserData = (userDetails) =>{
+ // console.log("--------updated---------data"+ JSON.stringify(userDetails));
+  const details = userDetails;
+// Define the document ID to update
+const docId = details._id;
+
+// Define the new data for the document
+const newData = {
+  // Update the fields that you want to change
+  otp: details.otp
+};
+
+// Update the document with the new data
+return client
+  .patch(docId)
+  .set(newData)
+  .commit()
+  .then((updatedDoc) => {
+    console.log('Document updated:', updatedDoc);
+  })
+  .catch((error) => {
+    console.error('Update failed:', error.message);
+  });
+}
 
 
-
-export default { fetchUserDetails, fetchCategories, createUser, insertData, uploadImage, deleteRow, getUserDetails };
+export default { fetchUserDetails, fetchCategories, createUser, insertData, uploadImage, deleteRow, getUserDetails, updateUserData };

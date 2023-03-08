@@ -35,11 +35,11 @@ const WelcomeScreen = ({ navigation }) => {
             </Text>
 
             <View style={styles.login}>
-                <Avatar.Icon style={styles.box} backgroundColor={COLOR.secondary} color={COLOR.secondary} size={50} icon="lamp" />
-                <Avatar.Icon style={styles.box} backgroundColor={COLOR.secondary} color={COLOR.secondary} size={50} icon="pipe" />
-                <Avatar.Icon style={styles.box} backgroundColor={COLOR.secondary} color={COLOR.secondary} size={50} icon="cctv" />
-                <Avatar.Icon style={styles.box} backgroundColor={COLOR.secondary} color={COLOR.secondary} size={50} icon="fire" />
-                <Avatar.Icon style={styles.box} backgroundColor={COLOR.secondary} color={COLOR.secondary} size={50} icon="city" />
+                <Avatar.Icon style={styles.box} backgroundColor={COLOR.white} color={COLOR.secondary} size={50} icon="lamp" />
+                <Avatar.Icon style={styles.box} backgroundColor={COLOR.white} color={COLOR.secondary} size={50} icon="pipe" />
+                <Avatar.Icon style={styles.box} backgroundColor={COLOR.white} color={COLOR.secondary} size={50} icon="cctv" />
+                <Avatar.Icon style={styles.box} backgroundColor={COLOR.white} color={COLOR.secondary} size={50} icon="fire" />
+                <Avatar.Icon style={styles.box} backgroundColor={COLOR.white} color={COLOR.secondary} size={50} icon="city" />
             </View>
             <View style={styles.indicatorContainer}>
                 <PrimaryButton

@@ -12,6 +12,7 @@ import * as Google from 'expo-google-app-auth'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'expo-image-picker/src/ImagePicker';
 import { urlFor } from '../sanity';
+import {SendOtpAfterRegistration} from '../services/EmailOtpService';
 
 const RegistrationScreen = ({ navigation }) => {
     
@@ -81,7 +82,7 @@ const RegistrationScreen = ({ navigation }) => {
         }
 
         if (isValid) {
-            register();
+             register();
         }
     };
 
@@ -124,7 +125,19 @@ const RegistrationScreen = ({ navigation }) => {
                             }
                             
                 
-                createUser(bodyObj).catch((error)=>console.log(error));
+                 createUser(bodyObj).then(
+                    (data)=> {
+                      
+                        const userCreated = JSON.stringify(data)
+                        if(userCreated){
+                           const isEmailSend =  SendOtpAfterRegistration(data).catch((error)=>console.log(error));
+                           console.log("email sent "+isEmailSend);
+                           if(isEmailSend){
+                           navigation.navigate("Verify User", {'details': userCreated});
+                        }
+                         }
+                    })
+                    .catch((error)=>console.log(error));
           
             } catch (error) {
                 console.log(error.message);
@@ -343,7 +356,7 @@ const RegistrationScreen = ({ navigation }) => {
                         </View>
                     </View>
                     <TouchableOpacity style={{ marginTop: 10 }}>
-                        <PrimaryButton title="Register" onPress={validate} ></PrimaryButton>
+                        <PrimaryButton title="Register" onPress={ validate} ></PrimaryButton>
                     </TouchableOpacity>
                     <Text
                         onPress={() => navigation.navigate('Login')}
