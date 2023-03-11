@@ -10,9 +10,11 @@ import * as Location from 'expo-location';
 import * as Expo from 'expo';
 import * as Google from 'expo-google-app-auth'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as ImagePicker from 'expo-image-picker/src/ImagePicker';
+import * as ImagePicker from 'expo-image-picker';
 import { urlFor } from '../sanity';
 import {SendOtpAfterRegistration} from '../services/EmailOtpService';
+import { Camera } from 'expo-camera';
+import { permissions } from 'expo';
 
 const RegistrationScreen = ({ navigation }) => {
     
@@ -231,24 +233,27 @@ const RegistrationScreen = ({ navigation }) => {
     // This function is triggered when the "Open camera" button pressed
     const openCamera = async () => {
         // Ask the user for the permission to access the camera
+        try{
         const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-
+        console.log(permissionResult);
         if (permissionResult.granted === false) {
             alert("You've refused to allow this appp to access your camera!");
             return;
         }
-
+        
         const result = await ImagePicker.launchCameraAsync({
             allowsEditing: true,
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 0.8,
-        });
+            quality: 1,
+        }).catch((error)=>console.log(error));
 
-        if (!result.cancelled) {
+        if (!result?.canceled) {
+            console.log(result);
             setImages(result.uri);
             const imageUrl = await uploadImage(result.uri).catch((error)=>console.log(error));
            setProfilePic(imageUrl);
-        }
+        }}
+        catch(error){console.log(error)};
     }
 
 
