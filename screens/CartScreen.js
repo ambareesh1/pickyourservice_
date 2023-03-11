@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import {
     Text, TextInput,
     ImageBackground,
@@ -19,10 +19,13 @@ import * as ImagePicker from 'expo-image-picker/src/ImagePicker';
 import { TouchableOpacity, PermissionsAndroid } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { UserContext } from "../services/UserContext";
 import * as Location from 'expo-location';
+import { createUser, uploadImage, deleteRow } from '../services/dataservice'
+
 
 const CartScreen = ({ navigation }) => {
-
+    const { user } = useContext(UserContext);
     const dispatch = useDispatch();
     const cartItems = useSelector(state => state.cart);
     const [data, setData] = useState([]);
@@ -32,10 +35,12 @@ const CartScreen = ({ navigation }) => {
     const [text, setText] = useState('');
     const maxLength = 1000;
     const [images, setImages] = useState([]);
+    const [imageStorage, setImageStorage] = useState([]);
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [address, setAddress] = useState("#2-62, Guttur, Penukonda, Anantapur, 515164");
     const [locationPermission, setLocationPermission] = useState(null);
+  
 
     useEffect(() => {
         setData(cartItems);
@@ -159,6 +164,10 @@ const CartScreen = ({ navigation }) => {
 
         if (!result.canceled) {
             setImages([...images, result.uri]);
+            images.map((x)=>{
+                setImageStorage(...imageStorage,  uploadImage(x).catch((error)=>console.log(error)));
+            })
+           console.log(imageStorage);
         }
     }
 
@@ -178,8 +187,12 @@ const CartScreen = ({ navigation }) => {
             quality: 0.8,
         });
 
-        if (!result.cancelled) {
+        if (!result.canceled) {
             setImages([...images, result.uri]);
+            images.map((x)=>{
+                setImageStorage(...imageStorage,  uploadImage(x).catch((error)=>console.log(error)));
+            })
+           console.log(images);
         }
     }
 
@@ -211,6 +224,58 @@ const CartScreen = ({ navigation }) => {
         setImages(newImages);
     };
 
+    const insertServiceRequest = () =>{
+        let data = {
+            "_type": "serviceRequest",
+            "serviceRequestId": "",
+            "requestById": user.id,
+            "requestBy": user.name,
+            "phoneNo": user.phoneNo,
+            "email": user.email,
+            "address": user.address,
+            "latitude": "37.7749",
+            "longitude": "-122.4194",
+            "pickDateToservice": currentDate,
+            "problemDescription": text,
+            "subTotal": total,
+            "GST": "2.50",
+            "otherServiceTax": "1.00",
+            "discount": "0.00",
+            "totalCost": total*2.50,
+            "images": [
+              {
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-123",
+                  "_type": "reference"
+                }
+              }
+            ],
+            "serviceItems": [
+              {
+                "_type": "object",
+                "categoryId": "1",
+                "subCategoryId": "2",
+                "serviceId": "3",
+                "serviceName": "Faucet Repair"
+              }
+            ],
+            "assignedTo": [
+              {
+                "_type": "object",
+                "id": "1",
+                "patnerName": "Jane Smith",
+                "patnerphone": "555-5678",
+                "patneremail": "jane.smith@example.com",
+                "aadhar": "1234-5678-9012",
+                "rating": "4.5",
+                "serviceCharge": "50.00",
+                "transactionId": "TX001"
+              }
+            ]
+          }
+          
+    }
 
     return (
         <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>

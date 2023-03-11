@@ -53,7 +53,7 @@ const LoginScreen = ({ navigation }) => {
         
          const userdata =  await getUserDetails(mobilenumber);
          if(userdata){
-            setUser({ name: userdata.name, email: userdata.email, phoneNo : userdata.phoneNo, image : getImageUrl(userdata.profileimage.asset._ref) });
+            setUser({ name: userdata.name, email: userdata.email, phoneNo : userdata.phoneNo, image : getImageUrl(userdata.profileimage.asset._ref), addess:userdata.addess, id:userdata._id });
             //sendEmailBlue(userdata);
               return true;
          }

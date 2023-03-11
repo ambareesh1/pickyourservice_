@@ -5,7 +5,7 @@ import { Button } from 'react-native-paper';
 import SmsListener from 'react-native-sms-listener';
 import COLORS from '../Constants/Colors';
 import { PrimaryButton } from '../Components/Button';
-
+import {SendOtpAfterRegistration} from '../services/EmailOtpService'
 
 const RegistrationConformScreen = ({ route, navigation }) => {
    
@@ -26,6 +26,7 @@ const RegistrationConformScreen = ({ route, navigation }) => {
             setIsCorrect(true);
         }
         else if(data.otp == data.otp){
+            //SendOtpAfterRegistration();
             navigation.navigate("Home");
         }else{
             setInvalidRequest("Invalid OTP. Resend or try again")
