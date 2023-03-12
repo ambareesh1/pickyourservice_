@@ -20,23 +20,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.jpg",
+        "foregroundImage": "./assets/logo_final.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.ambru.pickyourservice",
-      "versionCode": 1,
-      "useNextNotificationsApi": true,
-      "config": {
-        "googleSignIn": {
-          "apiKey": "AIzaSyCQJWKg0lbuZwTfD8HwwsUHrp-8nPoL_dY"
-        },
-        "keystore": {
-          "keystorePath": "/path/to/my/pickyourservice.jks",
-          "keystorePassword": "AmmaNana@514",
-          "keyAlias": "pickyourservice",
-          "keyPassword": "AmmaNana@514"
-        }
-      }
+      "versionCode": 1
+  
     },
     "web": {
       "favicon": "./assets/favicon.png"
