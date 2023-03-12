@@ -16,7 +16,8 @@ const COLORS = {
     tomato: '#B00020',
     pink: '#FF0266',
     success: '#087f23',
-    greywhite: '#EEEEEE'
+    greywhite: '#EEEEEE',
+    greyShade:'#28231D'
 
 };
 

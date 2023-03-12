@@ -23,19 +23,19 @@ const LoginScreen = ({ navigation }) => {
     const onChangeMobileNumber = (value) => {
         setMobileNumber(value);
     };
-    const onSubmitMobileNumber = () => {
+    const onSubmitMobileNumber = async() => {
         //validate mobile number
         if (isNaN(mobilenumber) || mobilenumber == '') {
             setUserError(true);
         } else {
-            if (!validatePhoneInDb()) {
+            if (!await validatePhoneInDb()) {
                 setUserError(true);
             } else {
                 setUserError(false);
                 setVisible(!visible);
                 //sendSms(9535770068, "Hi Ambru, You got OTP #4334 from pick your srevice. Verify your mobile by providing the otp.")
-                sendOtp(8074819233, 3366);
-                navigation.navigate("Otp Screen");
+                //sendOtp(8074819233, 3366);
+                navigation.navigate("Track Our Partner");
             }
         }
     };
@@ -52,8 +52,9 @@ const LoginScreen = ({ navigation }) => {
     const validatePhoneInDb = async() => {
         
          const userdata =  await getUserDetails(mobilenumber);
+        
          if(userdata){
-            setUser({ name: userdata.name, email: userdata.email, phoneNo : userdata.phoneNo, image : getImageUrl(userdata.profileimage.asset._ref), addess:userdata.addess, id:userdata._id });
+            setUser({ name: userdata.name, email: userdata.email, phoneNo : userdata.phoneNo, image : getImageUrl(userdata.profileimage.asset._ref), addess:userdata.addess, id:userdata._id, latitude:userdata.latitude, longitude:userdata.longitude });
             //sendEmailBlue(userdata);
               return true;
          }
@@ -179,7 +180,7 @@ const LoginScreen = ({ navigation }) => {
                     <View style={styles.indicatorContainer}>
                         <PrimaryButton
                             mode="contained"
-                            onPress={() => onSubmitMobileNumber()}
+                            onPress={() =>  onSubmitMobileNumber()}
                             title="Login"
                         />
 

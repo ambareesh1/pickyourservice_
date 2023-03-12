@@ -40,6 +40,16 @@ export default {
             title: 'pincode'
         },
         {
+            name: 'latitude',
+            type: 'string',
+            title: 'latitude'
+        }, 
+        {
+            name: 'longitude',
+            type: 'string',
+            title: 'longitude'
+        },
+        {
             name: 'profileimage',
             title: 'profileimage',
             type: 'image'
