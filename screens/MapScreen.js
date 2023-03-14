@@ -6,9 +6,9 @@ import {
   TextInput,
   useWindowDimensions,
   ActivityIndicator,
-  ScrollView,
+  ScrollView, Animated
 } from "react-native";
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, Polyline, PROVIDER_GOOGLE, AnimatedRegion } from "react-native-maps";
 import MapViewDirections, {
   DirectionsService,
 } from "react-native-maps-directions";
@@ -28,6 +28,18 @@ const MapScreen = ({ navigation }) => {
   const [totalMinutes, setTotalMinutes] = useState(0);
   const [totalKm, setTotalKm] = useState(0);
   const { width, height } = useWindowDimensions();
+  const [driverPosition, setDriverPosition] = useState(
+    null
+  );
+  const NewCoordinates = [
+    { latitude: 14.187818740084317, longitude: 77.62524233962212 },
+    { latitude: 14.180226345688, longitude: 77.62924968892192 },
+    { latitude: 14.17021947021324, longitude: 77.62135863020704 },
+    { latitude: 14.147477902424004, longitude: 77.60575818703529 },
+    {latitude:14.120284566071142, longitude:77.61097595116624},
+    {latitude: 14.084959345841485, longitude: 77.5970996934118}
+  ];
+
   useEffect(() => {
     const getHomeServiceLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -46,26 +58,28 @@ const MapScreen = ({ navigation }) => {
         latitude: 14.0930258502412,
         longitude: 77.59604662621587,
       });
+
+
+      let currentLocation = await Location.watchPositionAsync(
+        { accuracy: Location.Accuracy.High, distanceInterval: 10 },
+        (ordinates) => {
+          NewCoordinates.map((x=>{
+            setInterval(() => {
+              setOrigin(x);
+            }, 6000);
+            
+          }))
+         
+        }
+      );
     };
     getHomeServiceLocation();
-  }, []);
-
-  const handleGetDirections = async () => {
-    // Generate random latitude and longitude values
-    const lat = Math.random() * 180 - 90;
-    const lng = Math.random() * 360 - 180;
-    const destinationCoords = { latitude: lat, longitude: lng };
-    setDestination(destinationCoords);
-    try {
-      let response = await fetch(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=AIzaSyBdbtpnWfyMaY89Q4GqhYeQFnvueUZuBuM`
-      );
-      let json = await response.json();
-      setDirections(json.routes[0]);
-    } catch (error) {
-      console.error(error);
+    if(origin && destination){
+      
     }
-  };
+  }, [origin,destination]);
+
+   
 
   return (
     <View
