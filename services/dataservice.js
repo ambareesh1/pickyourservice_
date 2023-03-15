@@ -126,14 +126,14 @@ export const uploadImage = async (imagePath) => {
   })
   }
 
-  export const 
-  getUserDetails = async(phoneNo) =>{
-    const query = `*[_type == "users" && phoneNo == "9535770068"][0]`;
+  export const  getUserDetails = async(phoneNo) =>{
+    const query = `*[_type == "users" && phoneNo == "${phoneNo}"][0]`;
     const userDetails = await client.fetch(query).catch((error) => {
         console.log("Error while fetching user details");
     });
     return userDetails;
   }
+ 
 
 export const updateUserData = (userDetails) =>{
  // console.log("--------updated---------data"+ JSON.stringify(userDetails));
@@ -161,4 +161,39 @@ return client
 }
 
 
-export default { fetchUserDetails, fetchCategories, createUser, insertData, uploadImage, deleteRow, getUserDetails, updateUserData };
+export const createServiceRequestDetails = async(bodyObj) => {
+  return await client.create({
+    _type:  "serviceRequest",
+    ...bodyObj
+  })
+    .then(res => {
+      console.log('Data inserted successfully', res);
+      return res;
+    })
+    .catch(err => {
+      console.error('Error inserting data', err.message);
+      throw err;
+    });
+};
+
+export const generateServiceRequestId = async () => {
+  // Query the database for the latest service request and get its ID.
+  const query = '*[_type == "serviceRequest"] | order(serviceRequestId desc)[0]';
+  const lastRequest = await client.fetch(query);
+
+  // If there are no existing service requests, set the last ID to 0.
+  const lastId = lastRequest ? parseInt(lastRequest.serviceRequestId.substr(2)) : 0;
+
+  // Increment the last ID by 1 and pad it with zeros to make it a 4-digit number.
+  const newId = ('00' + (lastId + 1)).slice(-3);
+
+  // Return the new service request ID with 'SR' appended to the beginning.
+  return 'SR' + newId;
+}
+export const fetchOrders = async (phoneNo) => {
+  const query = `*[_type == "serviceRequest" && phoneNo == "${phoneNo}"]`;
+  const orders = await client.fetch(query).catch((error) => console.log(error));
+  return orders;
+};
+
+export default { fetchUserDetails, fetchCategories, createUser, insertData, uploadImage, deleteRow, getUserDetails, updateUserData, createServiceRequestDetails, generateServiceRequestId,fetchOrders }; 

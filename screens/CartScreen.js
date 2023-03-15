@@ -21,7 +21,7 @@ import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { UserContext } from "../services/UserContext";
 import * as Location from 'expo-location';
-import { createUser, uploadImage, deleteRow } from '../services/dataservice'
+import { createUser, uploadImage, deleteRow, createServiceRequestDetails, generateServiceRequestId } from '../services/dataservice'
 
 
 const CartScreen = ({ navigation }) => {
@@ -44,6 +44,7 @@ const CartScreen = ({ navigation }) => {
 
     useEffect(() => {
         setData(cartItems);
+       
         setTotal(data.length > 0 ? data.map(x => x.price).reduce((a, b) => a + b, 0) : 0);
     }, [cartItems]);
 
@@ -58,13 +59,19 @@ const CartScreen = ({ navigation }) => {
             const newData = [...data];
             const updatedItem = { ...item, count: value };
             newData[updateCountIdex] = updatedItem;
+            newData.count = value;
+           console.log(newData);
             setData(newData);
+            
 
             const total = newData.reduce((acc, service) => {
                 return acc + (service.price * service.count);
             }, 0);
             setTotal(total);
         }
+
+        //console.log("*************----cart items-------");
+       // console.log(data);
     }
 
     const deleteItemFromCart = () => {
@@ -164,10 +171,6 @@ const CartScreen = ({ navigation }) => {
 
         if (!result.canceled) {
             setImages([...images, result.uri]);
-            images.map((x)=>{
-                setImageStorage(...imageStorage,  uploadImage(x).catch((error)=>console.log(error)));
-            })
-           console.log(imageStorage);
         }
     }
 
@@ -189,10 +192,6 @@ const CartScreen = ({ navigation }) => {
 
         if (!result.canceled) {
             setImages([...images, result.uri]);
-            images.map((x)=>{
-                setImageStorage(...imageStorage,  uploadImage(x).catch((error)=>console.log(error)));
-            })
-           console.log(images);
         }
     }
 
@@ -224,45 +223,60 @@ const CartScreen = ({ navigation }) => {
         setImages(newImages);
     };
 
-    const insertServiceRequest = () =>{
-        let data = {
-            "_type": "serviceRequest",
-            "serviceRequestId": "",
+    const insertServiceRequest = async() =>{
+
+        let imageStorageArray = [];
+        for (const x of images) {
+            try {
+              const resultImg =  await uploadImage(x).catch((error)=> console.log(error));
+              const store = {
+                _type: 'image',
+                _key : "key_"+Math.floor(Math.random() * 5000) + 1,
+                asset: {
+                  _type: 'reference',
+                  _ref: resultImg
+                } 
+              };
+              imageStorageArray.push(store);
+             
+            }catch (error) {
+                console.log(imageStorageArray);
+              }
+        }
+
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth() + 1;
+            const date = currentDate.getDate();
+            const hours = currentDate.getHours();
+            const minutes = currentDate.getMinutes();
+            const seconds = currentDate.getSeconds();
+
+            const currentDateAndTime =  date +"/"+ month +"/"+ year+" "+hours+":"+minutes;
+
+
+        let serviceData = {
+            "serviceRequestId": await generateServiceRequestId().catch((error)=>console.log(error)),
             "requestById": user.id,
             "requestBy": user.name,
             "phoneNo": user.phoneNo,
             "email": user.email,
-            "address": user.address,
+            "address": address,
             "latitude": "37.7749",
             "longitude": "-122.4194",
-            "pickDateToservice": currentDate,
+            "pickDateToservice": date,
             "problemDescription": text,
             "subTotal": total,
-            "GST": "2.50",
-            "otherServiceTax": "1.00",
-            "discount": "0.00",
+            "GST": 2.50,
+            "otherServiceTax": 2,
+            "discount": 10,
             "totalCost": total*2.50,
-            "images": [
-              {
-                "_type": "image",
-                "asset": {
-                  "_ref": "image-123",
-                  "_type": "reference"
-                }
-              }
-            ],
-            "serviceItems": [
-              {
-                "_type": "object",
-                "categoryId": "1",
-                "subCategoryId": "2",
-                "serviceId": "3",
-                "serviceName": "Faucet Repair"
-              }
-            ],
+            "images": imageStorageArray,
+            "serviceItems": data,
+            "requestRaisedOn": currentDateAndTime,
+            "status": "Order Raised",
             "assignedTo": [
               {
-                "_type": "object",
                 "id": "1",
                 "patnerName": "Jane Smith",
                 "patnerphone": "555-5678",
@@ -270,10 +284,13 @@ const CartScreen = ({ navigation }) => {
                 "aadhar": "1234-5678-9012",
                 "rating": "4.5",
                 "serviceCharge": "50.00",
-                "transactionId": "TX001"
+                "transactionId": "TX001",
+                _key : "key_"+Math.floor(Math.random() * 5000) + 1
               }
             ]
           }
+
+        const result =   createServiceRequestDetails(serviceData).catch((error)=>console.log(error));
           
     }
 
@@ -416,7 +433,7 @@ const CartScreen = ({ navigation }) => {
                         </Card.Content>
                     </Card>
                     <View style={{ marginTop: '5%', marginBottom: '6%', margin: 5 }}>
-                        <SecondaryButton title={'Book Service'} onPress={() => navigateToProgress()} />
+                        <SecondaryButton title={'Book Service'} onPress={() => insertServiceRequest()} />
                     </View>
 
                 </View> : <View style={style.noCartItems}>

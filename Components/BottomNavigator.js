@@ -51,6 +51,7 @@ const BottomNavigator = () => {
                     tabBarIcon: ({ color }) => (
                         <Icon name="person" color={color} size={28} />
                     ),
+                    headerShown:true
                 }}
             />
             <Tab.Screen
@@ -84,7 +85,7 @@ const BottomNavigator = () => {
                     tabBarIcon: ({ color }) => (
                         <Icon name="local-mall" color={color} size={28} />
                     ),
-                    headerShown: false,
+                    headerShown: true,
 
                 }}
             />

@@ -1,11 +1,11 @@
-import client from '@sanity/client';
+import client from '@sanity/client'
 
 const generateServiceRequestId = async () => {
-  const query = '*[_type == "serviceRequest"] | order(serviceRequestId desc)[0]';
-  const lastRequest = await client.fetch(query);
-  const lastId = lastRequest ? parseInt(lastRequest.serviceRequestId.substr(2)) : 0;
-  const newId = ('00' + (lastId + 1)).slice(-3);
-  return 'SR' + newId;
+  const query = '*[_type == "serviceRequest"] | order(serviceRequestId desc)[0]'
+  const lastRequest = await client.fetch(query)
+  const lastId = lastRequest ? parseInt(lastRequest.serviceRequestId.substr(2)) : 0
+  const newId = ('00' + (lastId + 1)).slice(-3)
+  return 'SR' + newId
 }
 export default {
   name: 'serviceRequest',
@@ -15,24 +15,20 @@ export default {
     {
       name: 'serviceRequestId',
       title: 'Service Request ID',
-      type: 'number',
-      readOnly: true,
-      validation: (Rule) => Rule.required(),
-      options: {
-        // Generate the ID automatically when creating a new document
-        defaultValue: () => generateServiceRequestId(),
-      },
-    },
-    {
-      name: 'requestById',
-      title: 'Request By ID',
       type: 'string',
+      readOnly: false,
     },
     {
       name: 'requestBy',
       title: 'Request By',
       type: 'string',
     },
+    {
+      name: 'requestById',
+      title: 'Request By ID',
+      type: 'string',
+    },
+
     {
       name: 'phoneNo',
       title: 'Phone Number',
@@ -71,27 +67,39 @@ export default {
     {
       name: 'subTotal',
       title: 'Subtotal',
-      type: 'string',
+      type: 'number',
+      options: {
+        step: 0.01,
+      },
     },
     {
       name: 'GST',
       title: 'GST',
-      type: 'string',
+      type: 'number',
+      options: {
+        step: 0.01,
+      },
     },
     {
       name: 'otherServiceTax',
       title: 'Other Service Tax',
-      type: 'string',
+      type: 'number',
+      options: {
+        step: 0.01,
+      },
     },
     {
       name: 'discount',
       title: 'Discount',
-      type: 'string',
+      type: 'number',
     },
     {
       name: 'totalCost',
       title: 'Total Cost',
-      type: 'string',
+      type: 'number',
+      options: {
+        step: 0.01,
+      },
     },
     {
       name: 'images',
@@ -105,25 +113,50 @@ export default {
       type: 'array',
       of: [
         {
-          name: 'categoryId',
-          title: 'Category ID',
-          type: 'string',
+          type: 'object',
+          fields: [
+            {
+              name: 'service',
+              title: 'Service Name',
+              type: 'string',
+            },
+            {
+              name: 'categoryIndex',
+              title: 'category Index',
+              type: 'number',
+            },
+
+            {
+              name: 'serviceIndex',
+              title: 'serviceIndex',
+              type: 'number',
+            },
+
+            {
+              name: 'count',
+              title: 'No of items',
+              type: 'number',
+            },
+            {
+              name: 'price',
+              title: 'price',
+              type: 'number',
+              options: {
+                step: 0.01,
+              },
+            },
+            {
+              name: 'isActive',
+              title: 'Is Active',
+              type: 'boolean',
+            },
+            {
+              name: 'image',
+              title: 'Service Images',
+              type: 'image',
+            },
+          ],
         },
-        {
-          name: 'subCategoryId',
-          title: 'Subcategory ID',
-          type: 'string',
-        },
-        {
-          name: 'serviceId',
-          title: 'Service ID',
-          type: 'string',
-        },
-        {
-          name: 'serviceName',
-          title: 'Service Name',
-          type: 'string',
-        }
       ],
     },
     {
@@ -132,47 +165,66 @@ export default {
       type: 'array',
       of: [
         {
-          name: 'id',
-          title: 'ID',
-          type: 'string',
-        },
-        {
-          name: 'patnerName',
-          title: 'Patner Name',
-          type: 'string',
-        },
-        {
-          name: 'patnerphone',
-          title: 'patner Phone',
-          type: 'string',
-        },
-        {
-          name: 'patneremail',
-          title: 'patner Email',
-          type: 'string',
-        },
-        {
-          name: 'aadhar',
-          title: 'Aadhar',
-          type: 'string',
-        },
-        {
-          name: 'rating',
-          title: 'Rating',
-          type: 'string',
-        },
+          type: 'object',
+          fields: [
+            {
+              name: 'id',
+              title: 'ID',
+              type: 'string',
+            },
+            {
+              name: 'patnerName',
+              title: 'Patner Name',
+              type: 'string',
+            },
+            {
+              name: 'patnerphone',
+              title: 'patner Phone',
+              type: 'string',
+            },
+            {
+              name: 'patneremail',
+              title: 'patner Email',
+              type: 'string',
+            },
+            {
+              name: 'aadhar',
+              title: 'Aadhar',
+              type: 'string',
+            },
+            {
+              name: 'rating',
+              title: 'Rating',
+              type: 'string',
+            },
 
-        {
-          name: 'serviceCharge',
-          title: 'Service Charge',
-          type: 'string',
+            {
+              name: 'serviceCharge',
+              title: 'Service Charge',
+              type: 'string',
+            },
+            {
+              name: 'transactionId',
+              title: 'Transaction ID',
+              type: 'string',
+            },
+          ],
         },
-        {
-          name: 'transactionId',
-          title: 'Transaction ID',
-          type: 'string',
-        }
       ],
     },
+    {
+      name: 'isActive',
+      title: 'isActive',
+      type: 'boolean',
+    },
+    {
+      name: 'status',
+      title: 'status',
+      type: 'string',
+    },{
+      name: 'requestRaisedOn',
+      title: 'Request Raised On',
+      type: 'datetime',
+    }
   ],
 }

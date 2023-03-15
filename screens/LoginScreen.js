@@ -35,7 +35,7 @@ const LoginScreen = ({ navigation }) => {
                 setVisible(!visible);
                 //sendSms(9535770068, "Hi Ambru, You got OTP #4334 from pick your srevice. Verify your mobile by providing the otp.")
                 //sendOtp(8074819233, 3366);
-                navigation.navigate("Track Our Partner");
+                navigation.navigate("Otp Screen");
             }
         }
     };
