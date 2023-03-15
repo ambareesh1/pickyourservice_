@@ -26,7 +26,7 @@ const MyOrders = ({ navigation }) => {
                 let data = await fetchOrders(phoneNo).catch((error)=>console.log(error));
                 setData(data);
                 console.log("-------service items -------");
-               console.log(data[0].serviceItems);
+               console.log(data);
             } 
           catch (error) {
             console.error(error);
@@ -79,8 +79,8 @@ const MyOrders = ({ navigation }) => {
                             <View key={index}><View style={style.itemContainer}>
                                 <Card style={{ borderColor: COLORS.darkgrey, margin: 2 }}>
 
-                                    <View style={{ padding: 5, borderColor: COLORS.grey, marginBottom: 20, backgroundColor: '#EEEEEE', margin: 5, borderRadius: 20 }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+                                    <View style={{ padding: 5, borderColor: COLORS.white, marginBottom: 20, margin: 5}}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, backgroundColor:COLORS.white,  borderRadius: 20  }}>
                                             <Text style={{ color: COLORS.primary, fontWeight: 'bold', fontSize: 16 }}>Order #: {item.serviceRequestId}</Text>
                                             <Text style={{ color: COLORS.darkgrey }}><FontAwesome name="circle" color={getPrefferedColor(item.status)} size={15}></FontAwesome>  {item.status}</Text>
                                         </View>
@@ -93,13 +93,13 @@ const MyOrders = ({ navigation }) => {
                                          )
                                         })}
                                     </Card.Content>
-                                    <Card.Actions style={{ borderTopColor: COLORS.darkgrey, borderTopWidth: 0.1, marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <Card.Actions style={{ borderTopColor: COLORS.darkgrey, borderTopWidth: 0.1, marginTop: 0, flexDirection: 'row', justifyContent: 'space-between' }}>
 
                                         <View style={{ flexDirection: 'row', paddingRight: 30, justifyContent: 'flex-start' }}>
                                             {item.status == "In Progress" &&
                                                 <><MaterialCommunityIcons name="map-marker-outline" color={COLORS.tomato} size={30}></MaterialCommunityIcons>
                                                     <Button 
-                                                     mode="contained"
+                                                     mode="outlined"
                                                      style={{ borderRadius: 10 }}
                                                         onPress={navigateToTracking}
                                                         title="Track Our Partner"

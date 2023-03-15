@@ -20,9 +20,15 @@ const MyServiceSlice = createSlice({
                     }
                 })
             }
+        },
+        emptyServiceItems (state, action){
+            return {
+                ...state,
+                initialState: []
+              };
         }
     }
 })
 
-export const { addMyServices, updateMyServices } = MyServiceSlice.actions;
+export const { addMyServices, updateMyServices, emptyServiceItems } = MyServiceSlice.actions;
 export default MyServiceSlice.reducer;

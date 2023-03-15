@@ -27,7 +27,7 @@ export default function App() {
           <Stack.Screen name="Registration" component={RegistrationScreen} options={{ headerShown: true }} />
           <Stack.Screen name="SubCategory" component={SubCategory} options={{ headerShown: false }} />
           <Stack.Screen name="Search" component={SubCategory} options={{ headerShown: false }} />
-          <Stack.Screen name="ProgressScreen" component={ProgressScreen} options={{ headerShown: true }} />
+          <Stack.Screen name="Progress Screen" component={ProgressScreen} options={{ headerShown: true }} />
           <Stack.Screen name="Otp Screen" component={otpScreen} options={{ headerShown: true }}></Stack.Screen>
           <Stack.Screen name="Verify User" component={RegistrationConformScreen} options={{ headerShown: true }}></Stack.Screen>
           <Stack.Screen name="Track Our Partner" component={MapScreen} options={{ headerShown: true }}></Stack.Screen>

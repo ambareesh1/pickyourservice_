@@ -22,9 +22,17 @@ const MyCartSlice = createSlice({
         updateServiceInMyCart(state, action) {
             let index = state.findIndex(obj => obj._key === action.payload._key);
             state.splice(index, 1);
+        },
+        emptyChartItems (state, action){
+            console.log("-----------empty cart --------in slice")
+            return {
+                ...state,
+                initialState: []
+              };
         }
+        
     }
 });
 
-export const { addServiceToMyCart, updateServiceInMyCart } = MyCartSlice.actions;
+export const { addServiceToMyCart, updateServiceInMyCart, emptyChartItems } = MyCartSlice.actions;
 export default MyCartSlice.reducer;

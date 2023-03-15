@@ -24,6 +24,9 @@ function ProgressScreen() {
             <ScrollView>
                 <View>
                     <View style={{ backgroundColor: COLORS.primary, color: COLORS.white, flex: 1, height: 60 }}>
+
+                    <Text style={{ paddingTop: 20, color: COLORS.white, fontSize: 16, paddingLeft: 5 }}> Thank you for raising the order.</Text>
+
                         <Text style={{ paddingTop: 20, color: COLORS.white, fontSize: 16, paddingLeft: 5 }}> Service Order Request # 100007287</Text>
 
                     </View>

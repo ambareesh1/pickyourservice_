@@ -13,8 +13,8 @@ import { SecondaryButton } from '../Components/Button';
 import { useSelector } from 'react-redux';
 import { formatCurrency } from "react-native-format-currency";
 import { useDispatch } from 'react-redux';
-import { updateServiceInMyCart } from '../Components/MyCartSlice';
-import { updateMyServices } from '../Components/MyServiceSlice';
+import { updateServiceInMyCart, emptyChartItems } from '../Components/MyCartSlice';
+import { updateMyServices, emptyServiceItems } from '../Components/MyServiceSlice';
 import * as ImagePicker from 'expo-image-picker/src/ImagePicker';
 import { TouchableOpacity, PermissionsAndroid } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
@@ -254,9 +254,10 @@ const CartScreen = ({ navigation }) => {
 
             const currentDateAndTime =  date +"/"+ month +"/"+ year+" "+hours+":"+minutes;
 
+            const requestId = await generateServiceRequestId().catch((error)=>console.log(error));
 
         let serviceData = {
-            "serviceRequestId": await generateServiceRequestId().catch((error)=>console.log(error)),
+            "serviceRequestId": requestId,
             "requestById": user.id,
             "requestBy": user.name,
             "phoneNo": user.phoneNo,
@@ -290,7 +291,15 @@ const CartScreen = ({ navigation }) => {
             ]
           }
 
-        const result =   createServiceRequestDetails(serviceData).catch((error)=>console.log(error));
+        const result =   await createServiceRequestDetails(serviceData).catch((error)=>console.log(error));
+        console.log("---------------RESULT---------------");
+        console.log(result);
+        if(result){
+            dispatch(emptyChartItems([]));
+            dispatch(emptyServiceItems([]));
+            navigation.navigate("Progress Screen", {"orderId" : requestId});
+
+        }
           
     }
 
