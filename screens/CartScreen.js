@@ -295,10 +295,10 @@ const CartScreen = ({ navigation }) => {
         console.log("---------------RESULT---------------");
         console.log(result);
         if(result){
-            dispatch(emptyChartItems([]));
-            dispatch(emptyServiceItems([]));
-            navigation.navigate("Progress Screen", {"orderId" : requestId});
-
+          //  dispatch(emptyChartItems([]));
+          //  dispatch(emptyServiceItems([]));
+            //navigation.navigate("Progress Screen", {"orderId" : requestId});
+            navigation.navigate("Pick the payment");
         }
           
     }
