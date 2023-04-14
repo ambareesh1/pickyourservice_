@@ -24,7 +24,7 @@ const MyOrders = ({ navigation }) => {
     const getOrderHistory = async (phoneNo) => {
         try {
                 let data = await fetchOrders(phoneNo).catch((error)=>console.log(error));
-                setData(data);
+                setData(data.sort((a, b) => new Date(b.requestRaisedOn) - new Date(a.requestRaisedOn)));
                 console.log("-------service items -------");
                console.log(data);
             } 
@@ -88,7 +88,7 @@ const MyOrders = ({ navigation }) => {
 
                                     <Card.Content>
                                         <Text style={{ color: COLORS.dark, textAlign: 'right' }}><FontAwesome name="calendar" size={15}></FontAwesome>  {item.requestRaisedOn}</Text>
-                                        {data[index].serviceItems.map((serviceItem, index)=>{
+                                        {data[index].serviceItems.map((serviceItem)=>{
                                          return (  <Paragraph style={{ fontSize: 16, paddingBottom:5 }}>{serviceItem.service} x {serviceItem.count}</Paragraph>
                                          )
                                         })}

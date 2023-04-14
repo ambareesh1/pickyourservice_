@@ -37,16 +37,21 @@ const CartScreen = ({ navigation }) => {
     const [images, setImages] = useState([]);
     const [imageStorage, setImageStorage] = useState([]);
     const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [address, setAddress] = useState("#2-62, Guttur, Penukonda, Anantapur, 515164");
+    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [address, setAddress] = useState('');
     const [locationPermission, setLocationPermission] = useState(null);
-  
 
     useEffect(() => {
         setData(cartItems);
-       
-        setTotal(data.length > 0 ? data.map(x => x.price).reduce((a, b) => a + b, 0) : 0);
+        setAddress(user.address);
     }, [cartItems]);
+    
+    useEffect(()=>{
+        console.log(cartItems.map(x => x.price).reduce((a, b) => a + b, 0) );
+        setTotal(cartItems.length > 0 ? cartItems.map(x => x.price).reduce((a, b) => a + b, 0) : 0);
+    },[])
 
     const calculateTotal = (value, id) => {
 
@@ -60,18 +65,13 @@ const CartScreen = ({ navigation }) => {
             const updatedItem = { ...item, count: value };
             newData[updateCountIdex] = updatedItem;
             newData.count = value;
-           console.log(newData);
             setData(newData);
-            
-
             const total = newData.reduce((acc, service) => {
                 return acc + (service.price * service.count);
             }, 0);
             setTotal(total);
         }
 
-        //console.log("*************----cart items-------");
-       // console.log(data);
     }
 
     const deleteItemFromCart = () => {
@@ -107,9 +107,19 @@ const CartScreen = ({ navigation }) => {
         setShowDatePicker(Platform.OS === 'ios');
         setDate(currentDate);
     };
-
+    const onTimeChange = (event, selectedDate) => {
+        console.log("---------------------time------");
+        console.log(selectedDate);
+        const timeSelected = selectedDate || time;
+        setShowTimePicker(Platform.OS === 'ios');
+        setTime(timeSelected);
+    };
     const showMode = () => {
         setShowDatePicker(true);
+    };
+
+    const showTime = () => {
+        setShowTimePicker(true);
     };
 
     const getCurrentLocation = async () => {
@@ -292,8 +302,6 @@ const CartScreen = ({ navigation }) => {
           }
 
         const result =   await createServiceRequestDetails(serviceData).catch((error)=>console.log(error));
-        console.log("---------------RESULT---------------");
-        console.log(result);
         if(result){
           //  dispatch(emptyChartItems([]));
           //  dispatch(emptyServiceItems([]));
@@ -305,10 +313,7 @@ const CartScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
-            <Appbar.Header style={{ backgroundColor: COLORS.primary }}>
-                <Appbar.BackAction onPress={navigateTohomePage} />
-                <Appbar.Content title="Cart" />
-            </Appbar.Header>
+       
             <ScrollView>
                 {cartItems.length > 0 ? <View style={style.itemContainer}>
                     <DataTable >
@@ -331,6 +336,7 @@ const CartScreen = ({ navigation }) => {
                                     minValue={1}
                                     maxValue={50000}
                                     placeholder={"Enter sq.ft"}
+                                    placeholderTextColor="#999"
                                     onChangeText={value => calculateTotal(value, item._key)}
                                 /> : <NumericInput
                                     totalWidth={80}
@@ -378,25 +384,41 @@ const CartScreen = ({ navigation }) => {
                     </Card>
                     <Divider style={{ borderBottomColor: COLORS.primary, padding: 1 }} />
                     <Card>
-                        <Card.Content>
-
+                        <Card.Content style={{backgroundColor:COLORS.white}}>
                             <Text style={style.heading}>When do you want the service ?</Text>
+                            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                             <TouchableOpacity style={style.dateContainer} onPress={() => showMode()}>
                                 <Text style={style.showDatePickerButton}>
                                     <MaterialCommunityIcons name="calendar" color={COLORS.primary} size={25}></MaterialCommunityIcons>
                                 </Text>
                                 <Text style={style.date}>{date.toDateString("DD-MM-YYY")}</Text>
+                                </TouchableOpacity>
+                            
+                           
+                            <TouchableOpacity style={style.dateContainer} onPress={() => showTime()}>
+                                <Text style={style.showDatePickerButton}>
+                                    <MaterialCommunityIcons name="clock" color={COLORS.primary} size={25}></MaterialCommunityIcons>
+                                </Text>
+                                <Text style={style.date}>{time.toLocaleTimeString()}</Text>
 
                             </TouchableOpacity>
+                            </View>
                             {showDatePicker && (
-                                <DateTimePicker
+                                <><DateTimePicker
                                     value={date}
                                     mode="date"
-                                    minimumDate={new Date()}
+                                    is24Hour={true}
                                     display="default"
-                                    onChange={onDateChange}
-                                />
+                                    onChange={onDateChange} />
+                                   
+                                   </>
                             )}
+                            {showTimePicker &&  <DateTimePicker
+                                    value={time}
+                                    mode="time"
+                                    is24Hour={true}
+                                    display="default"
+                                    onChange={onTimeChange} />}
 
 
                         </Card.Content>
@@ -404,8 +426,6 @@ const CartScreen = ({ navigation }) => {
                     <Divider style={{ borderBottomColor: COLORS.primary, padding: 1 }} />
                     <Card>
                         <Card.Content>
-
-
                             <TouchableOpacity style={{ flexDirection: 'row-reverse' }} onPress={() => getCurrentLocation()}>
                                 <Text style={{ marginTop: 6, marginLeft: 6, color: COLORS.darkgrey }}> Pick Location</Text>
                                 <TouchableOpacity style={style.locationButton}>
@@ -437,6 +457,7 @@ const CartScreen = ({ navigation }) => {
                                 maxLength={maxLength}
                                 onChangeText={handleChangeText}
                                 value={text}
+                                placeholderTextColor="#999"
                                 placeholder="Provide the clear description of appliances like Item names , quantity & specify the problem facing"
                             />
                         </Card.Content>
@@ -583,7 +604,7 @@ const style = StyleSheet.create({
     },
 
     heading: {
-        fontSize: 18,
+        fontSize: 14,
         marginBottom: 10,
         color: COLORS.darkgrey
     },

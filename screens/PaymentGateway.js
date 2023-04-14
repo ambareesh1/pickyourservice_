@@ -1,9 +1,11 @@
+import RazorpayCheckout   from 'react-native-razorpay';
 import React, { useState } from 'react';
 import { View, Button } from 'react-native';
-import { WebView } from 'react-native-webview';
-import RazorpayCheckout   from 'react-native-razorpay';
+
+
 const PaymentGateway = () => {
   const [showWebView, setShowWebView] = useState(false);
+ const RAZORPAY_API_KEY = 'rzp_test_yZITSUOor2tX2a';
 
   const paymentWithRazor = () => {
     setShowWebView(true);
@@ -11,53 +13,45 @@ const PaymentGateway = () => {
       description: 'Credits towards consultation',
       image: 'https://i.imgur.com/3g7nmJC.png', // Add image URL here
       currency: 'INR',
-      key: 'rzp_test_yZITSUOor2tX2a',
+      key: RAZORPAY_API_KEY,
       amount: '5000',
       order_id: 1233,
-      name: 'foo',
+      name: 'Test',
       prefill: {
-        email: 'ambru@razorpay.com',
-        contact: '9535770068',
-        name: 'Ambru'
+        email: 'test@gmail.com',
+        contact: '9191919191',
+        name: 'Razorpay'
       },
       theme: {color: '#F37254'}
     };
-    RazorpayCheckout.open(options)
-      .then((data) => {
-        // handle success
-        alert(`Success: ${data.razorpay_payment_id}`);
-      })
-      .catch((error) => {
-        // handle failure
-        console.log(error);
-        alert(`Error: ${error.code} | ${error.description}`);
-      });
-  };
+    
+const successCallback = (payment_id) => {
+  console.log('Payment successful:', payment_id);
+};
 
-  const hideWebView = () => {
-    setShowWebView(false);
+const cancelCallback = (error) => {
+  console.log('Payment cancelled:', error);
+};
+
+const errorCallback = (error) => {
+  console.log('Payment error:', error.description);
+};
+
+RazorpayCheckout.open(options)
+  .then(successCallback)
+  .catch(cancelCallback) 
+  .catch(errorCallback);
   };
 
   return (
     <View>
-      {!showWebView && (
-        <Button title="Pay with Razorpay" onPress={paymentWithRazor} />
-      )}
-      {showWebView && (
-        <WebView
-          source={{
-            uri: 'https://checkout.razorpay.com/v1/payment-button.js',
-          }}
-          onMessage={(event) => {
-            if (event.nativeEvent.data === 'success') {
-              alert('Payment successful');
-              hideWebView();
-            }
-          }}
-        />
-      )}
+     
+        <Button title="Pay with Razorpay" onPress={()=>paymentWithRazor()} />
+     
     </View>
   );
 };
+
+
 
 export default PaymentGateway;

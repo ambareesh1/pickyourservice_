@@ -15,6 +15,7 @@ import  { UserProvider }  from "./services/UserContext";
 import RegistrationConformScreen from './screens/RegistrationConformScreen';
 import MapScreen from './screens/MapScreen';
 import PaymentGateway from './screens/PaymentGateway';
+import CartScreen from './screens/CartScreen';
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
           <Stack.Screen name="Verify User" component={RegistrationConformScreen} options={{ headerShown: true }}></Stack.Screen>
           <Stack.Screen name="Track Our Partner" component={MapScreen} options={{ headerShown: true }}></Stack.Screen>
           <Stack.Screen name="Pick the payment" component={PaymentGateway} options={{ headerShown: true }}></Stack.Screen>
+          <Stack.Screen name="Cart" component={CartScreen} options={{ headerShown: true }}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

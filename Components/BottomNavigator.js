@@ -97,7 +97,7 @@ const BottomNavigator = () => {
                     tabBarIcon: ({ color }) => (
                         <Icon name="shopping-cart" color={color} size={28} />
                     ),
-                    headerShown: false,
+                    headerShown: true,
 
                 }}
             />
